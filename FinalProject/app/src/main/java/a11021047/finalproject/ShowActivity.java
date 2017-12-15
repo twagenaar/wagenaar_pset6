@@ -1,5 +1,6 @@
 /*
  * ShowActivity
+ * Tessa Wagenaar
  * This activity displays the information of a movie.
  * It uses the DownloadImageTask class to load the poster image from
  * the URL.
@@ -52,6 +53,7 @@ public class ShowActivity extends AppCompatActivity {
         setContentView(R.layout.activity_show);
         Intent intent = getIntent();
         movieTitle = intent.getStringExtra("movie");
+        
         title = findViewById(R.id.movieTitle);
         releasedate = findViewById(R.id.movieReleased);
         plot = findViewById(R.id.moviePlot);
@@ -111,7 +113,6 @@ public class ShowActivity extends AppCompatActivity {
         catch (Exception e) {
             Log.d("Error", e.toString());
         }
-
     }
 
     /*

@@ -1,5 +1,6 @@
 /*
  * MyMovie
+ * Tessa Wagenaar
  * This class stores the information about a movie.
  * You can store the title, release date, poster URL and plot.
  */

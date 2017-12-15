@@ -1,5 +1,6 @@
 /*
  * LoginFragment
+ * Tessa Wagenaar
  * This fragment lets the user log in to the firebase database.
  * If the user is already logged in a logout button will
  * appear instead of the login fields.
@@ -169,8 +170,6 @@ public class LoginFragment extends DialogFragment implements View.OnClickListene
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w("failed", "createUserWithEmail:failure", task.getException());
-//                                Toast.makeText(getActivity(), "Authentication failed.",
-//                                        Toast.LENGTH_SHORT).show();
                                 if (task.getException() != null) {
                                     errorText.setText(task.getException().getMessage());
                                     errorText.setVisibility(View.VISIBLE);
@@ -207,8 +206,6 @@ public class LoginFragment extends DialogFragment implements View.OnClickListene
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w("failed", "signInWithEmail:failure", task.getException());
-//                                Toast.makeText(getActivity(), "Authentication failed.",
-//                                        Toast.LENGTH_SHORT).show();
                                 if (task.getException() != null) {
                                     errorText.setText(task.getException().getMessage());
                                     errorText.setVisibility(View.VISIBLE);
@@ -230,6 +227,7 @@ public class LoginFragment extends DialogFragment implements View.OnClickListene
         Log.d("validate", "entered");
         boolean valid = true;
 
+        // Check the email field.
         String email = emailField.getText().toString();
         if (TextUtils.isEmpty(email)) {
             emailField.setError("Required.");
@@ -238,6 +236,7 @@ public class LoginFragment extends DialogFragment implements View.OnClickListene
             emailField.setError(null);
         }
 
+        // Check the password field
         String password = passwordField.getText().toString();
         if (TextUtils.isEmpty(password)) {
             passwordField.setError("Required.");

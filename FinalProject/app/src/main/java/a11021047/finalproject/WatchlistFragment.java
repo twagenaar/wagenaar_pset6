@@ -1,5 +1,6 @@
 /*
  * WatchlistFragment
+ * Tessa Wagenaar
  * This fragment collects the movies the user saved
  * and displays them in a listview. The movies can be
  * removed from the watchlist by longpressing the title
@@ -128,7 +129,7 @@ public class WatchlistFragment extends DialogFragment {
      * Listen for a longclick on a movie title and remove
      * the selected movie from the database.
      */
-    public class WatchDeleteListener implements AdapterView.OnItemLongClickListener {
+    private class WatchDeleteListener implements AdapterView.OnItemLongClickListener {
         @Override
         public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
             String title = listView.getItemAtPosition(i).toString();
@@ -147,7 +148,7 @@ public class WatchlistFragment extends DialogFragment {
  * Listen for a longclick on a movie title and remove
  * the selected movie from the database.
  */
-    public class WatchListener implements AdapterView.OnItemClickListener {
+    private class WatchListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             String title = listView.getItemAtPosition(i).toString();

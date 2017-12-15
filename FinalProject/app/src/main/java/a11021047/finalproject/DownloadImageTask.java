@@ -1,5 +1,6 @@
 /*
  * DownloadImageTask
+ * Tessa Wagenaar
  * Download an image from a given URL.
  * This code is mostly from stackoverflow:
  * https://stackoverflow.com/questions/5776851/load-image-from-url

@@ -1,5 +1,6 @@
 /*
  * MainActivity
+ * Tessa Wagenaar
  * This activity contains a search field with search button.
  * Enter a title in the search bar to search for a movie.
  * When the movie is clicked you will be redirected to an
@@ -90,17 +91,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         updateMenu();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         switch (item.getItemId()) {
             case R.id.login_button:
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 LoginFragment fragment = new LoginFragment();
                 fragment.show(ft, "dialog");
                 user = mAuth.getCurrentUser();
                 break;
             case R.id.watchlist_button:
-                FragmentTransaction ft2 = getSupportFragmentManager().beginTransaction();
                 WatchlistFragment fragment2 = new WatchlistFragment();
-                fragment2.show(ft2, "dialog");
+                fragment2.show(ft, "dialog");
                 user = mAuth.getCurrentUser();
                 break;
         }
@@ -131,8 +131,7 @@ public class MainActivity extends AppCompatActivity {
      * search for movies corresponding to the search tag when
      * it is hit.
      */
-    class enterListener implements View.OnKeyListener {
-
+    private class enterListener implements View.OnKeyListener {
         @Override
         public boolean onKey(View view, int i, KeyEvent keyEvent) {
             if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) &&
@@ -154,15 +153,15 @@ public class MainActivity extends AppCompatActivity {
         try {
             JSONObject object = new JSONObject(response);
             JSONArray array = object.getJSONArray("Search");
-            ArrayList<String> myStringArray = new ArrayList<>();
+            ArrayList<String> titles = new ArrayList<>();
 
             for (int i = 0; i < array.length(); i++) {
                 JSONObject item = array.getJSONObject(i);
-                myStringArray.add(item.getString("Title"));
+                titles.add(item.getString("Title"));
             }
             ArrayAdapter<String> list = new ArrayAdapter<>(MainActivity.this,
                     android.R.layout.simple_list_item_1,
-                    myStringArray);
+                    titles);
             listView.setOnItemClickListener(new searchClickListener());
             listView.setAdapter(list);
         }
@@ -176,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
      * When a movie title in the listView is clicked, redirect the user to
      * the showActivity which shows the user more information about the movie
      */
-    class searchClickListener implements AdapterView.OnItemClickListener {
+    private class searchClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             Intent intent = new Intent(MainActivity.this, ShowActivity.class);
