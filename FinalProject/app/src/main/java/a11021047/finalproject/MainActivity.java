@@ -1,3 +1,11 @@
+/*
+ * MainActivity
+ * This activity contains a search field with search button.
+ * Enter a title in the search bar to search for a movie.
+ * When the movie is clicked you will be redirected to an
+ * activity which will show you more information about the movie.
+ */
+
 package a11021047.finalproject;
 
 import android.content.Intent;
@@ -41,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
     EditText editText;
     private Menu menu;
 
+    /*
+     * Create the options menu at the top of the app
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -52,6 +63,15 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /*
+     * updateMenu
+     * Show the correct menu buttons
+     * Logged in:
+     *   Log out
+     *   Watchlist
+     * Logged out:
+     *   Log in
+     */
     public void updateMenu() {
         if (user != null) {
             menu.findItem(R.id.watchlist_button).setVisible(true);
@@ -63,6 +83,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /*
+     * onOptionItemSelected
+     * Show the correct fragment according to which button was clicked.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         updateMenu();
@@ -83,6 +107,12 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    /*
+     * OnCreate
+     * Look up the layout fields needed for the rest of the app.
+     * Also set a key listener on the editText to make it respond
+     * when the enter button is hit.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,18 +122,34 @@ public class MainActivity extends AppCompatActivity {
         button = findViewById(R.id.searchButton);
         editText = findViewById(R.id.searchText);
 
-        editText.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    search_results(editText.getText().toString());
-                    return true;
-                }
-                return false;
-            }
-        });
+        editText.setOnKeyListener(new enterListener());
     }
 
+    /*
+     * enterListener
+     * Listen for when the enterbutton is hit and start the
+     * search for movies corresponding to the search tag when
+     * it is hit.
+     */
+    class enterListener implements View.OnKeyListener {
+
+        @Override
+        public boolean onKey(View view, int i, KeyEvent keyEvent) {
+            if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) &&
+                    (i == KeyEvent.KEYCODE_ENTER)) {
+                search_results(editText.getText().toString());
+                return true;
+            }
+            return false;
+        }
+    }
+
+    /*
+     * parseResponse
+     * Read the JSONobject received from the query to the API
+     * Add all the movies which correspond the search tag to
+     * the listview.
+     */
     private void parseResponse(String response) {
         try {
             JSONObject object = new JSONObject(response);
@@ -117,14 +163,7 @@ public class MainActivity extends AppCompatActivity {
             ArrayAdapter<String> list = new ArrayAdapter<>(MainActivity.this,
                     android.R.layout.simple_list_item_1,
                     myStringArray);
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Intent intent = new Intent(MainActivity.this, ShowActivity.class);
-                    intent.putExtra("movie", listView.getItemAtPosition(i).toString());
-                    startActivity(intent);
-                }
-            });
+            listView.setOnItemClickListener(new searchClickListener());
             listView.setAdapter(list);
         }
         catch(Exception e) {
@@ -132,6 +171,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /*
+     * searchClickListener
+     * When a movie title in the listView is clicked, redirect the user to
+     * the showActivity which shows the user more information about the movie
+     */
+    class searchClickListener implements AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            Intent intent = new Intent(MainActivity.this, ShowActivity.class);
+            intent.putExtra("movie", listView.getItemAtPosition(i).toString());
+            startActivity(intent);
+        }
+    }
+
+    /*
+     * When the search button is hit, start the search for
+     * movies corresponding to the search tag.
+     */
     public void button_search(View view) {
         search_results(editText.getText().toString());
     }

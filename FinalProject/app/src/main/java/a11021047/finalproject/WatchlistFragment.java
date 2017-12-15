@@ -1,29 +1,27 @@
+/*
+ * WatchlistFragment
+ * This fragment collects the movies the user saved
+ * and displays them in a listview. The movies can be
+ * removed from the watchlist by longpressing the title
+ * of the movie. The movie will then be removed from the
+ * firebase database and the listview will be updated to
+ * display the new information.
+ */
+
 package a11021047.finalproject;
 
-import android.content.Context;
-import android.graphics.Movie;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,12 +30,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.ref.Reference;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 
 public class WatchlistFragment extends DialogFragment {
@@ -52,6 +45,11 @@ public class WatchlistFragment extends DialogFragment {
         // Required empty public constructor
     }
 
+    /*
+     * onViewStateRestored
+     * Call the original method for this function and set
+     * the original listview to an empty arraylist.
+     */
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
@@ -68,6 +66,13 @@ public class WatchlistFragment extends DialogFragment {
         updateUI();
     }
 
+    /*
+     * updateUI
+     * Fill the arraylist with movie titles collected
+     * from the firebase database. If the user is not logged
+     * in redirect the user back to the main activity and
+     * tell them they are not logged in anymore.
+     */
     private void updateUI() {
         if (user == null) {
             this.dismiss();
@@ -100,6 +105,10 @@ public class WatchlistFragment extends DialogFragment {
         }
     }
 
+    /*
+     * onCreateView
+     * Inflate the view and set a longclicklistener to the listview.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -112,6 +121,11 @@ public class WatchlistFragment extends DialogFragment {
         return view;
     }
 
+    /*
+     * WatchListener
+     * Listen for a longclick on a movie title and remove
+     * the selected movie from the database.
+     */
     public class WatchListener implements AdapterView.OnItemLongClickListener {
         @Override
         public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {

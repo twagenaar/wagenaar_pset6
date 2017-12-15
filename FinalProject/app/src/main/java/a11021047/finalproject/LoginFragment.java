@@ -1,8 +1,14 @@
+/*
+ * LoginFragment
+ * This fragment lets the user log in to the firebase database.
+ * If the user is already logged in a logout button will
+ * appear instead of the login fields.
+ * To register a new user the same fields as the login fields
+ * can be used, but the user must hit register instead of login.
+ */
+
 package a11021047.finalproject;
 
-
-import android.app.Activity;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,25 +20,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import org.json.JSONObject;
-
-import java.util.concurrent.Executor;
 
 
 /**
@@ -50,11 +45,15 @@ public class LoginFragment extends DialogFragment implements View.OnClickListene
     Button registerButton;
     Button signoutButton;
 
-
     public LoginFragment() {
         // Required empty public constructor
     }
 
+    /*
+     * onViewStateRestored
+     * Call the original method for this function and update
+     * the User Interface to the user state.
+     */
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
@@ -63,6 +62,11 @@ public class LoginFragment extends DialogFragment implements View.OnClickListene
         updateUI(mAuth.getCurrentUser());
     }
 
+    /*
+     * onCreateView
+     * Create the layout, locate the needed fields in the layout
+     * and set listeners to the buttons.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -86,6 +90,17 @@ public class LoginFragment extends DialogFragment implements View.OnClickListene
         return view;
     }
 
+    /*
+     * onClick
+     * Perform the appropiate action when one of the buttons
+     * is pressed
+     * Log in:
+     *  Get the data and log in to firebase
+     * Register:
+     *  Get the data and register a new user to firebase
+     * Sign Out:
+     *  Sign out the current user
+     */
     @Override
     public void onClick(View view) {
         String email, password;
@@ -94,18 +109,29 @@ public class LoginFragment extends DialogFragment implements View.OnClickListene
                 email = emailField.getText().toString();
                 password = passwordField.getText().toString();
                 signIn(email, password);
+                this.dismiss();
                 break;
             case R.id.register:
                 email = emailField.getText().toString();
                 password = passwordField.getText().toString();
                 createAccount(email, password);
+                this.dismiss();
                 break;
             case R.id.signout:
                 signOut();
+                this.dismiss();
                 break;
         }
     }
 
+    /*
+     * updateUI
+     * Update the User Interface to match the user state
+     * User is null:
+     *  Show Login/Register fields
+     * User is set:
+     *  Show logout buttons
+     */
     private void updateUI(FirebaseUser user) {
         if (user != null) {
             emailField.setVisibility(View.GONE);
@@ -126,6 +152,10 @@ public class LoginFragment extends DialogFragment implements View.OnClickListene
         }
     }
 
+    /*
+     * createAccount
+     * Register a new user to the firebase database.
+     */
     public void createAccount(String email, String password) {
         if (validateForm()) {
             mAuth.createUserWithEmailAndPassword(email, password)
@@ -159,6 +189,10 @@ public class LoginFragment extends DialogFragment implements View.OnClickListene
         }
     }
 
+    /*
+     * signIn
+     * Sign the user in to the firebase database
+     */
     public void signIn(String email, String password) {
         if (validateForm()) {
             mAuth.signInWithEmailAndPassword(email, password)
@@ -187,14 +221,18 @@ public class LoginFragment extends DialogFragment implements View.OnClickListene
         }
     }
 
-    // https://github.com/firebase/quickstart-android/blob/master/auth/app/src/main/java/com/google/firebase/quickstart/auth/EmailPasswordActivity.java
+    /*
+     * validateForm
+     * return true if the email field and password field
+     * contain data. If a field does not contain the data needed,
+     * set an error on the field and return false
+     */
     private boolean validateForm() {
         Log.d("validate", "entered");
         boolean valid = true;
 
         String email = emailField.getText().toString();
         if (TextUtils.isEmpty(email)) {
-            Log.d("validate", "email empty");
             emailField.setError("Required.");
             valid = false;
         } else {
@@ -203,16 +241,18 @@ public class LoginFragment extends DialogFragment implements View.OnClickListene
 
         String password = passwordField.getText().toString();
         if (TextUtils.isEmpty(password)) {
-            Log.d("validate", "password empty");
             passwordField.setError("Required.");
             valid = false;
         } else {
             passwordField.setError(null);
         }
-        Log.d("validate", "end");
         return valid;
     }
 
+    /*
+     * Sign the user out and update the user interface to show
+     * the login/register fields
+     */
     private void signOut() {
         mAuth.signOut();
         updateUI(null);

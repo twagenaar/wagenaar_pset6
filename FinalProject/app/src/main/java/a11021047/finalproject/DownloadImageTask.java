@@ -1,3 +1,11 @@
+/*
+ * DownloadImageTask
+ * Download an image from a given URL.
+ * This code is mostly from stackoverflow:
+ * https://stackoverflow.com/questions/5776851/load-image-from-url
+ */
+
+
 package a11021047.finalproject;
 
 import android.graphics.Bitmap;
@@ -8,7 +16,7 @@ import android.widget.ImageView;
 
 import java.io.InputStream;
 
-// https://stackoverflow.com/questions/5776851/load-image-from-url
+
 public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
     ImageView bmImage;
 
