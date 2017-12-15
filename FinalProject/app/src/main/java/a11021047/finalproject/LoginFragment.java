@@ -109,13 +109,12 @@ public class LoginFragment extends DialogFragment implements View.OnClickListene
                 email = emailField.getText().toString();
                 password = passwordField.getText().toString();
                 signIn(email, password);
-                this.dismiss();
                 break;
             case R.id.register:
                 email = emailField.getText().toString();
                 password = passwordField.getText().toString();
                 createAccount(email, password);
-                this.dismiss();
+//                this.dismiss();
                 break;
             case R.id.signout:
                 signOut();
@@ -168,11 +167,12 @@ public class LoginFragment extends DialogFragment implements View.OnClickListene
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 errorText.setVisibility(View.GONE);
                                 updateUI(user);
+                                LoginFragment.this.dismiss();
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w("failed", "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(getActivity(), "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(getActivity(), "Authentication failed.",
+//                                        Toast.LENGTH_SHORT).show();
                                 if (task.getException() != null) {
                                     errorText.setText(task.getException().getMessage());
                                     errorText.setVisibility(View.VISIBLE);
@@ -205,11 +205,12 @@ public class LoginFragment extends DialogFragment implements View.OnClickListene
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 errorText.setVisibility(View.GONE);
                                 updateUI(user);
+                                LoginFragment.this.dismiss();
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w("failed", "signInWithEmail:failure", task.getException());
-                                Toast.makeText(getActivity(), "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(getActivity(), "Authentication failed.",
+//                                        Toast.LENGTH_SHORT).show();
                                 if (task.getException() != null) {
                                     errorText.setText(task.getException().getMessage());
                                     errorText.setVisibility(View.VISIBLE);

@@ -10,6 +10,7 @@
 
 package a11021047.finalproject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -116,7 +117,8 @@ public class WatchlistFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_watchlist, container, false);
 
         listView = view.findViewById(R.id.watchlist);
-        listView.setOnItemLongClickListener(new WatchListener());
+        listView.setOnItemLongClickListener(new WatchDeleteListener());
+        listView.setOnItemClickListener(new WatchListener());
 
         return view;
     }
@@ -126,7 +128,7 @@ public class WatchlistFragment extends DialogFragment {
      * Listen for a longclick on a movie title and remove
      * the selected movie from the database.
      */
-    public class WatchListener implements AdapterView.OnItemLongClickListener {
+    public class WatchDeleteListener implements AdapterView.OnItemLongClickListener {
         @Override
         public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
             String title = listView.getItemAtPosition(i).toString();
@@ -137,6 +139,21 @@ public class WatchlistFragment extends DialogFragment {
                 updateUI();
             }
             return true;
+        }
+    }
+
+    /*
+ * WatchListener
+ * Listen for a longclick on a movie title and remove
+ * the selected movie from the database.
+ */
+    public class WatchListener implements AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            String title = listView.getItemAtPosition(i).toString();
+            Intent intent = new Intent(getActivity(), ShowActivity.class);
+            intent.putExtra("movie", title);
+            startActivity(intent);
         }
     }
 }
