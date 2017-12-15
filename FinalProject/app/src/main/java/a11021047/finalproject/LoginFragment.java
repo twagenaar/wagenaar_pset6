@@ -114,11 +114,9 @@ public class LoginFragment extends DialogFragment implements View.OnClickListene
                 email = emailField.getText().toString();
                 password = passwordField.getText().toString();
                 createAccount(email, password);
-//                this.dismiss();
                 break;
             case R.id.signout:
                 signOut();
-                this.dismiss();
                 break;
         }
     }
@@ -257,6 +255,7 @@ public class LoginFragment extends DialogFragment implements View.OnClickListene
     private void signOut() {
         mAuth.signOut();
         updateUI(null);
+        this.dismiss();
     }
 
 }
